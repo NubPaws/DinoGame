@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Dino Game</title>
+		<link rel="stylesheet" href="./stylez.css">
+	</head>
+	<body>
+		<div id="hidden">
+			<!-- START Load images -->
+			<img src="./pics/clouds/1.png" class="clouds">
+			<img src="./pics/clouds/2.png" class="clouds">
+			<img src="./pics/clouds/3.png" class="clouds">
+			
+			<img src="./pics/player/standing.png" id="playerStanding">
+			<img src="./pics/player/run1.png" class="playerRunning">
+			<img src="./pics/player/run2.png" class="playerRunning">
+			<img src="./pics/player/run3.png" class="playerRunning">
+			<img src="./pics/player/run4.png" class="playerRunning">
+			
+			<img src="./pics/enemies/tall.png" id="tallEnenmy">
+			<img src="./pics/enemies/short.png" id="shortEnemy">
+			<img src="./pics/enemies/flying.png" id="flyingEnemy">
+			
+			<img src="./pics/game_over.png" id="gameOver">
+			<!-- END Load Images -->
+		</div>
+		<canvas id="gameCanvas" width="720" height="360"></canvas>
+		<span id="score">
+			Score: 0
+			<br />
+			Difficulty: 0
+		</span>
+		<span id="instructions">
+			<u><b>Instructions:</b></u><br />
+			Press space to start the game.<br />
+			While playing press space to jump.<br />
+			The longer you press the space bar, the higher you jump.
+		</span>
+		
+		<script type="text/javascript" src="./Utilities.js"></script>
+		<script type="text/javascript" src="./GameObjects.js"></script>
+		<script type="text/javascript" src="./Dino.js"></script>
+		<script type="text/javascript" src="./Looper.js"></script>
+	</body>
+</html>

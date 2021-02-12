@@ -61,8 +61,22 @@ const getRandEnemy = () => {
 		return undefined;
 }
 
+// Restart
+function restart() {
+	// Just reassign variables, yes there is some code duplication but what do you want from me?
+	player = new Player(world);
+	score = 0;
+	difficulty = 1;
+	baseSpeed = 5;
+	timer = 0;
+	world.objs = [];
+}
+
 // Logic
 function update() {
+	if (Keys.isClicked(Keys.Enter))
+		restart();
+	
 	player.update();
 	
 	if (player.moving) {

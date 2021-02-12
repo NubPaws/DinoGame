@@ -167,7 +167,7 @@ class FlyingEnemy extends Enemy {
 	
 	constructor(speed) {
 		super(32, 24, FlyingEnemy.img, speed);
-		this.y -= (Math.random() *90 +65);
+		this.y -= (Math.random() *120 +65);
 	}
 	
 }

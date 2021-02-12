@@ -39,6 +39,13 @@ class Graphics {
 		this.#ctx.drawImage(img, x, y, width, height);
 	}
 	
+	static isVisible(x, y, width, height) {
+		return ((0 <= x			&& x			<= Graphics.width)
+			||  (0 <= x +width	&& x +width		<= Graphics.width))
+			&& ((0 <= y			&& y			<= Graphics.height)
+			||  (0 <= y +height	&& y +height	<= Graphics.height));
+	}
+	
 }
 
 class Keys {

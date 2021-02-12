@@ -9,7 +9,7 @@ let nowTime;
 let UPS = 0;
 let FPS = 0;
 let fpsTimer = 0;
-let debug = true;
+let debug = false;
 
 function loop(timestamp) {
 	nowTime = timestamp;

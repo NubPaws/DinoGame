@@ -9,7 +9,10 @@ const scoreText = document.getElementById("score");
 let score = 0;
 let difficulty = 1;
 let baseSpeed = 5;
-let timer = 0;
+// Generates speed based on difficulty
+const genSpeed = () => { return baseSpeed * difficulty; }
+let timer = -1;
+
 const GameOver = {
 	img: document.getElementById("gameOver"),
 	width: 610,
@@ -26,9 +29,26 @@ const GameOver = {
 // Create the world
 const world = {
 	background: {
+		twin: 0.1,
 		ground: new Ground(Physics.groundHeight),
-		clouds: document.getElementsByClassName("clouds"),
+		clouds: Array.from(document.getElementsByClassName("clouds")),
 		cloudsX: 30, cloudsY: 15, cloudsWidth: 200, cloudsHeight: 98,
+		margin: 25,
+		update: () => {
+			const visible = Graphics.isVisible(
+				world.background.cloudsX, world.background.cloudsY,
+				world.background.cloudsWidth, world.background.cloudsHeight
+			);
+			if (!visible) { // Shuffle
+				const len = world.background.clouds.length;
+				const tmpClouds = world.background.clouds;
+				for (let i = 0; i < len -1; i++)
+					world.background.clouds[i] = tmpClouds[i +1];
+				world.background.clouds[len -1] = tmpClouds[0];
+				world.background.cloudsX = world.background.margin;
+			}
+			world.background.cloudsX -= genSpeed() *world.background.twin;
+		}
 	},
 	objs: [],
 	
@@ -44,9 +64,6 @@ world.intersects = (e) => {
 
 // Create the player
 let player = new Player(world);
-
-// Generates speed based on difficulty
-const genSpeed = () => { return baseSpeed * difficulty; }
 
 // Generates random enemy based on complex number analysis and Math.random(). 
 const getRandEnemy = () => {
@@ -68,7 +85,7 @@ function restart() {
 	score = 0;
 	difficulty = 1;
 	baseSpeed = 5;
-	timer = 0;
+	timer = -1;
 	world.objs = [];
 }
 
@@ -85,14 +102,13 @@ function update() {
 			difficulty++;
 		
 		timer++;
-		if (timer > 100) {
-			timer = 0;
+		if (timer %100 == 0)
 			world.objs.push(getRandEnemy());
-		}
 		
 		for (let i = 0; i < world.objs.length; i++)
 			world.objs[i].update();
 		
+		world.background.update();
 	}
 	
 	Keys.update();
@@ -108,7 +124,7 @@ function render() {
 	// Render clouds 
 	for (let i = 0; i < world.background.clouds.length; i++) {
 		Graphics.drawImage(world.background.clouds[i],
-			world.background.cloudsX + i *(world.background.cloudsWidth +25),
+			world.background.cloudsX + i *(world.background.cloudsWidth +world.background.margin),
 			world.background.cloudsY,
 			world.background.cloudsWidth,
 			world.background.cloudsHeight

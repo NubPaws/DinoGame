@@ -1,7 +1,7 @@
 // Assumes update() and render() are valid functions
 // Functions should be defined at dino.js
 
-const UPDATE_RATE = 60;
+const UPDATE_RATE = 50;
 const MILLIS_TO_UPDATES = 1000.0 / UPDATE_RATE;
 let deltaTime = 0;
 let lastTime = 0;

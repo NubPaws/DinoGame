@@ -1,19 +1,15 @@
 
-
-
 class Entity {
 	
 	x; y; width; height;
 	dx = 0;
 	dy = 0;
-	color;
 	
-	constructor(x, y, width, height, color) {
+	constructor(x, y, width, height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.color = color;
 	}
 	
 	update() {
@@ -25,15 +21,14 @@ class Entity {
 		Graphics.fillRect(this.x, this.y, this.width, this.height, this.color);
 	}
 	
+	// Oh god
 	intersects(e) {
-		return (e.x <= this.x && this.x <= e.x + e.width
-			&&  e.y <= this.y && this.y <= e.y + e.height)
-			|| (this.x <= e.x && e.x <= this.x + this.width
-			&&  this.y <= e.y && e.y <= this.y + this.height)
-			|| (e.x <= this.x + this.width && this.x + this.width <= e.x + e.width
-			&&  e.y <= this.y + this.height && this.y + this.height <= e.y + e.height)
-			|| (this.x <= e.x + e.width && e.x + e.width <= this.x + this.width
-			&&  this.y <= e.y + e.height && e.y + e.height <= this.y + this.height);
+		const tx = this.x,	ty = this.y,	tw = this.width,	th = this.height;
+		const ex = e.x,		ey = e.y,		ew = e.width,		eh = e.height;
+		return (ex <= tx		&& tx <= ex + ew		&& ey <= ty			&& ty <= ey + eh)
+			|| (tx <= ex		&& ex <= tx + tw		&& ty <= ey			&& ey <= ty + th)
+			|| (ex <= tx + tw	&& tx + tw <= e.x + ew	&& ey <= ty + th	&& ty + th <= e.y + eh)
+			|| (tx <= ex + ew	&& ex + ew <= tx + tw	&& ty <= ey + eh	&& ey + eh <= ty + th);
 	}
 	
 }
@@ -56,21 +51,39 @@ class Ground extends Entity {
 
 class Player extends Entity {
 	
-	world;
+	static get jumpingForce() { return 10; }
+	worldIntersectionCheck;
 	alive = true;
 	moving = false;
 	jumping = true;
 	
-	sprites = {
-		standing: document.getElementById("playerStanding"),
-		running: document.getElementsByClassName("playerRunning"),
-		runningID: 0, runningCounter: 0, runningCounterMax: 8
-	};
+	standingSprite = document.getElementById("playerStanding");
+	runningAnimation = new SpriteAnimation("playerRunning", 8);
 	
-	constructor(world) {
+	constructor(worldIntersectionCheck) {
 		super(25, Graphics.height -Physics.groundHeight -64*2, 28, 64);
 		this.color = Colors.orange;
-		this.world = world;
+		this.worldIntersectionCheck = worldIntersectionCheck;
+	}
+	
+	#jumpingLogic() {
+		if (this.jumping) {
+			this.dy += Physics.g * ((Keys.isPressed(Keys.Space)) ? .6 : 1);
+			if (this.y +this.height >= Graphics.height -Physics.groundHeight) {
+				this.dy = 0;
+				this.jumping = false;
+				this.y = Graphics.height - Physics.groundHeight - this.height -1;
+			}
+		}
+	}
+	
+	#deathLogic() {
+		if (this.worldIntersectionCheck(this)) {
+			this.moving = false;
+			this.alive = false;
+			this.jumping = false;
+			this.dx = this.dy = 0;
+		}
 	}
 	
 	update() {
@@ -79,32 +92,14 @@ class Player extends Entity {
 		}
 		if (Keys.isPressed(Keys.Space) && !this.jumping) {
 			this.jumping = true;
-			this.dy = -13.5;
+			this.dy = -Player.jumpingForce;
 		}
 		
-		this.sprites.runningCounter++;
-		if (this.sprites.runningCounter >= this.sprites.runningCounterMax) {
-			this.sprites.runningCounter = 0;
-			this.sprites.runningID++;
-			if (this.sprites.runningID >= this.sprites.running.length)
-				this.sprites.runningID = 0;
-		}
+		if (this.moving)
+			this.runningAnimation.update();
 		
-		if (this.jumping) {
-			this.dy += Physics.g * ((Keys.isPressed(Keys.Space)) ? .75 : 1.2);
-			if (this.intersects(this.world.background.ground)) {
-				this.dy = 0;
-				this.jumping = false;
-				this.y = Graphics.height - Physics.groundHeight - this.height -1;
-			}
-		}
-		
-		if (this.world.intersects(this)) {
-			this.moving = false;
-			this.alive = false;
-			this.jumping = false;
-			this.dx = this.dy = 0;
-		}
+		this.#jumpingLogic();
+		this.#deathLogic();
 		
 		this.x += this.dx;
 		this.y += this.dy;
@@ -112,11 +107,9 @@ class Player extends Entity {
 	}
 	
 	render() {
-		if (this.moving) {
-			Graphics.drawImage(this.sprites.running[this.sprites.runningID], this.x, this.y, this.width, this.height)
-		} else {
-			Graphics.drawImage(this.sprites.standing, this.x, this.y, this.width, this.height);
-		}
+		if (this.moving)
+			Graphics.drawImage(this.runningAnimation.current, this.x, this.y, this.width, this.height)
+		else Graphics.drawImage(this.standingSprite, this.x, this.y, this.width, this.height);
 	}
 	
 }
@@ -167,7 +160,7 @@ class FlyingEnemy extends Enemy {
 	
 	constructor(speed) {
 		super(32, 24, FlyingEnemy.img, speed);
-		this.y -= (Math.random() *120 +65);
+		this.y -= (Math.random() *120 +70);
 	}
 	
 }

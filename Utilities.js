@@ -1,5 +1,4 @@
 
-
 class Graphics {
 	
 	static #canvas;
@@ -120,9 +119,64 @@ class Colors {
 	
 }
 
+class GameOver {
+	
+	static #img = document.getElementById("gameOver");
+	static #width = 610;
+	static #height = 128;
+	
+	static render() {
+		Graphics.drawImage(GameOver.#img,
+			(Graphics.width - GameOver.#width) /2,
+			(Graphics.height - GameOver.#height) /2,
+			GameOver.#width, GameOver.#height
+		);
+	}
+	
+}
+
 class Physics {
 	
-	static get g() { return .8; }
+	static get g() { return .68; }
 	static get groundHeight() { return 100; }
+	
+}
+
+class SpriteAnimation {
+	
+	#imgs;
+	#current;
+	#tickCount;
+	#ticksPerImg;
+	
+	constructor(imgsClassName, ticksPerImg) {
+		this.#imgs = Array.from(document.getElementsByClassName(imgsClassName));
+		this.#ticksPerImg = ticksPerImg;
+		this.#current = 0;
+		this.#tickCount = 0;
+	}
+	
+	update() {
+		this.#tickCount++;
+		if (this.#tickCount >= this.#ticksPerImg) {
+			this.#tickCount = 0;
+			this.next();
+		}
+	}
+	
+	next(amount = 1) {
+		this.#current += amount;
+		if (this.#current >= this.#imgs.length)
+			this.#current = 0;
+	}
+	
+	prev(amount = 1) {
+		this.#current -= amount;
+		if (this.#current < 0)
+			this.#current = this.#imgs.length -1;
+	}
+	
+	get current() { return this.#imgs[this.#current]; }
+	get imgs() { return this.#imgs; }
 	
 }

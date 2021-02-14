@@ -18,7 +18,7 @@ class Entity {
 	}
 	
 	render() {
-		Graphics.fillRect(this.x, this.y, this.width, this.height, this.color);
+		Graphics.fillRect(this.x, this.y, this.width, this.height, Colors.green);
 	}
 	
 	// Oh god

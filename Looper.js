@@ -69,5 +69,9 @@ class Looper {
 	static set debug(debug) { Looper.#debug = debug; }
 	static get debug() { return Looper.debug; }
 	static get currPartOfSecond() { return Looper.#UPS / Looper.#UPDATE_RATE; }
+	static set updateRate(updateRate) {
+		Looper.#UPDATE_RATE = updateRate;
+		Looper.#MILLIS_TO_UPDATES = 1000.0 /Looper.#UPDATE_RATE;
+	}
 	
 }

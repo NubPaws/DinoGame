@@ -19,23 +19,23 @@ class Graphics {
 	}
 	
 	static fillRect(x, y, width, height, color) {
-		this.#ctx.beginPath();
-		this.#ctx.rect(x, y, width, height);
-		this.#ctx.fillStyle = color;
-		this.#ctx.fill();
+		Graphics.#ctx.beginPath();
+		Graphics.#ctx.rect(x, y, width, height);
+		Graphics.#ctx.fillStyle = color;
+		Graphics.#ctx.fill();
 	}
 	
 	static drawRect(x, y, width, height, color, stroke = -1) {
-		this.#ctx.beginPath();
-		this.#ctx.rect(x, y, width, height);
-		this.#ctx.strokeStyle = color;
+		Graphics.#ctx.beginPath();
+		Graphics.#ctx.rect(x, y, width, height);
+		Graphics.#ctx.strokeStyle = color;
 		if (stroke > -1)
-			this.#ctx.lineWidth = `${stroke}`;
-		this.#ctx.stroke();
+			Graphics.#ctx.lineWidth = `${stroke}`;
+		Graphics.#ctx.stroke();
 	}
 	
 	static drawImage(img, x, y, width, height) {
-		this.#ctx.drawImage(img, x, y, width, height);
+		Graphics.#ctx.drawImage(img, x, y, width, height);
 	}
 	
 	static isVisible(x, y, width, height) {
@@ -178,5 +178,6 @@ class SpriteAnimation {
 	
 	get current() { return this.#imgs[this.#current]; }
 	get imgs() { return this.#imgs; }
+	set ticksPerImage(tpi) { this.#ticksPerImg = tpi; }
 	
 }

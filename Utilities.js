@@ -60,8 +60,9 @@ class Keys {
 	static get Space() { return 4; }
 	static get Enter() { return 5; }
 	static get Ctrl() { return 6; }
-	static get Esc() { return 7; }
-	static get G() { return 8; }
+	static get Shift() { return 7; }
+	static get Esc() { return 8; }
+	static get G() { return 9; }
 	
 	static isPressed(key) { return Keys.#keys[key]; }
 	static isClicked(key) { return Keys.#keys[key] && !Keys.#prevKeys[key]; }

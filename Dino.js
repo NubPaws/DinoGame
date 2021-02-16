@@ -36,9 +36,12 @@ function update() {
 			World.addRandEnemy();
 		World.update();
 		
-		scoreText.innerHTML = `Score: ${score}<br />Difficulty: ${World.difficulty}`;
 	}
 	
+	if (Keys.isClicked(Keys.Shift))
+			World.nextDifficulty();
+	
+	scoreText.innerHTML = `Score: ${score}<br />Difficulty: ${World.difficulty}`;
 	Keys.update();
 }
 

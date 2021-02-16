@@ -83,11 +83,11 @@ class World {
 	static addRandEnemy() {
 		const rand = Math.random() *300;
 		const speed = World.genSpeed();
-		if (0 <= rand && rand < 100)
+		if (0 <= rand && rand < 125)
 			World.#objs.push(new TallEnemy(speed));
-		else if (100 <= rand && rand < 200)
+		else if (125 <= rand && rand < 250)
 			World.#objs.push(new ShortEnemy(speed));
-		else if (200 <= rand && rand <= 300)
+		else if (250 <= rand && rand <= 300)
 			World.#objs.push(new FlyingEnemy(speed));
 		else // Should not happen!
 			return undefined;
